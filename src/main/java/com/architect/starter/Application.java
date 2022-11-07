@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = {"com.architect.starter.models", "com.architect.starter.repositories"})
+@EnableJpaRepositories("com.architect.starter.repositories")
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
