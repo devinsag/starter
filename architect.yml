@@ -43,17 +43,16 @@ services:
     environment:
       POSTGRES_USERNAME: ${{ secrets.database_user }}
       POSTGRES_PASSWORD: ${{ secrets.database_password }}
-      POSTGRES_URL: jdbc:${{ services.database.interfaces.main.url }}
+      POSTGRES_URL: jdbc:postgresql://${{ services.database.interfaces.main.host}}:${{ services.database.interfaces.main.port}}/${{ secrets.database_name }}
       ENVIRONMENT: prod
+    depends_on:
+      - database
     debug:
       interfaces:
         main:
           port: 8080
       environment:
         ENVIRONMENT: dev
-        POSTGRES_USERNAME: ${{ secrets.database_user }}
-        POSTGRES_PASSWORD: ${{ secrets.database_password }}
-        POSTGRES_URL: jdbc:${{ services.database.interfaces.main.url }}
 
 
 
