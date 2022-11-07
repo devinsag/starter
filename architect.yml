@@ -1,0 +1,68 @@
+name: architect/template-starter-springboot
+
+description: |
+  An example Architect component that uses Spring Boot to serve the API and
+  Hibernate to connect to an auto-provisioned PostgreSQL database.
+
+keywords:
+  - java
+  - spring
+  - hibernate
+  - postgresql
+  - microservice
+
+secrets:
+  database_name:
+    default: default_db
+  database_user:
+    default: default_user
+  database_password:
+    default: default_pw
+
+services:
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: ${{ secrets.database_name }}
+      POSTGRES_USER: ${{ secrets.database_user }}
+      POSTGRES_PASSWORD: ${{ secrets.database_password }}
+    interfaces:
+      main:
+        port: 5432
+        protocol: postgresql
+        username: ${{ secrets.database_user }}
+        password: ${{ secrets.database_password }}
+        path: /${{ secrets.database_name }}
+
+  springboot:
+    build:
+      context: .
+    interfaces:
+      main:
+        port: 8080
+    environment:
+      POSTGRES_USERNAME: ${{ secrets.database_user }}
+      POSTGRES_PASSWORD: ${{ secrets.database_password }}
+      POSTGRES_URL: jdbc:${{ services.database.interfaces.main.url }}
+      ENVIRONMENT: prod
+    debug:
+      interfaces:
+        main:
+          port: 8080
+      environment:
+        ENVIRONMENT: dev
+        POSTGRES_USERNAME: ${{ secrets.database_user }}
+        POSTGRES_PASSWORD: ${{ secrets.database_password }}
+        POSTGRES_URL: jdbc:${{ services.database.interfaces.main.url }}
+
+
+
+# interfaces are used to expose our application to the gateway, allowing
+#   other services and dependencies to connect to one another.
+#   For more info - https://docs.architect.io/components/interfaces/
+interfaces:
+  # Interface for our main SpringBoot application
+  main:
+    url: ${{ services.springboot.interfaces.main.url }}
+    ingress:
+      subdomain: app
