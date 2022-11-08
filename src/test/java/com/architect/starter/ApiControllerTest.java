@@ -18,7 +18,7 @@ public class ApiControllerTest {
 
     @Test
     public void getApiGreeting() throws Exception {
-        ResponseEntity<String> response = template.getForEntity("/api/health", String.class);
+        ResponseEntity<String> response = template.getForEntity("/health", String.class);
         assertThat(response.getBody()).isEqualTo("UP");
     }
 }

@@ -82,8 +82,8 @@ public class MovieRatingController {
     produces = "application/json"
   )
   @ResponseBody
-  public ResponseEntity<MovieRating> updateMovie(@PathVariable("id") long id, @RequestBody MovieRating newMovieRating) {
-    MovieRating movieRating = movieRatingService.updateMovie(id, newMovieRating);
+  public ResponseEntity<MovieRating> updateMovieRating(@PathVariable("id") long id, @RequestBody MovieRating newMovieRating) {
+    MovieRating movieRating = movieRatingService.updateMovieRating(id, newMovieRating);
     return ResponseEntity.ok(movieRating);
   }
 

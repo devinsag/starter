@@ -11,6 +11,8 @@ keywords:
   - postgresql
   - microservice
 
+# Add secrets to be used by different services. For more information:
+# https://docs.architect.io/deployments/secrets/
 secrets:
   database_name:
     default: default_db
@@ -19,7 +21,54 @@ secrets:
   database_password:
     default: default_pw
 
+# Below are the configured services for the Go component.
+# For more info - https://docs.architect.io/components/services/
 services:
+  ### This service is the actual SpringBoot component ###
+  app:
+    # Build context is the location of your application relative to the architect.yml file
+    build:
+      context: .
+    # Main interface port used to help define the url in the top level `interfaces` block at the bottom of this file
+    interfaces:
+      main:
+        port: 3000
+    # Set environment variables for your application here
+    environment:
+      SPRING_PORT: 3000
+      POSTGRES_USERNAME: ${{ secrets.database_user }}
+      POSTGRES_PASSWORD: ${{ secrets.database_password }}
+      POSTGRES_URL: jdbc:postgresql://${{ services.database.interfaces.main.host}}:${{ services.database.interfaces.main.port}}/${{ secrets.database_name }}
+      ENVIRONMENT: prod
+    # We want our app to start up after the db is running so that we can connect to it on startup!
+    # This block contains a list of services we need to start before 'app' starts.
+    depends_on:
+      - database
+    # The liveness_probe makes sure the application is healthy - if not, it will re-start the application
+    liveness_probe:
+      # Uses curl to check if this route returns a 200
+      path: /health
+      port: 3000
+      interval: 5s
+    # Debug block is used to modify behavior when running `architect dev` (without the --debug=false flag)
+    #   One common example is to enable hot-reloading for local development. For more info, see -
+    #   https://docs.architect.io/components/local-configuration/#hot-reloading
+    debug:
+      volumes:
+      # The name of the volume we are creating
+        app:
+          # Path to source code we want to mount relative to the architect.yml file
+          host_path: .
+          # The `WORKDIR` defined in the Dockerfile, where we want our code to be mounted
+          mount_path: /opt/code/src
+      environment:
+        ENVIRONMENT: dev
+
+
+  #  This is an additional service that adds a postgres database
+  #   to show off Architect's support for microservice architecture
+  #   through service discovery. For more info, check out:
+  #   https://docs.architect.io/components/service-discovery/
   database:
     image: postgres:14
     environment:
@@ -34,28 +83,6 @@ services:
         password: ${{ secrets.database_password }}
         path: /${{ secrets.database_name }}
 
-  springboot:
-    build:
-      context: .
-    interfaces:
-      main:
-        port: 3000
-    environment:
-      SPRING_PORT: 3000
-      POSTGRES_USERNAME: ${{ secrets.database_user }}
-      POSTGRES_PASSWORD: ${{ secrets.database_password }}
-      POSTGRES_URL: jdbc:postgresql://${{ services.database.interfaces.main.host}}:${{ services.database.interfaces.main.port}}/${{ secrets.database_name }}
-      ENVIRONMENT: prod
-    depends_on:
-      - database
-    debug:
-      interfaces:
-        main:
-          port: 3000
-      environment:
-        ENVIRONMENT: dev
-
-
 
 # interfaces are used to expose our application to the gateway, allowing
 #   other services and dependencies to connect to one another.
@@ -63,6 +90,6 @@ services:
 interfaces:
   # Interface for our main SpringBoot application
   main:
-    url: ${{ services.springboot.interfaces.main.url }}
+    url: ${{ services.app.interfaces.main.url }}
     ingress:
       subdomain: app

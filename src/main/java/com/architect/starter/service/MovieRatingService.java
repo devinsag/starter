@@ -36,7 +36,7 @@ public class MovieRatingService {
     return movieRatingRepository.save(newMovieRating);
   }
 
-  public MovieRating updateMovie(long id, MovieRating newMovieRating) {
+  public MovieRating updateMovieRating(long id, MovieRating newMovieRating) {
     MovieRating updatedMovieRating = null;
     Optional<MovieRating> movieRating = movieRatingRepository.findById(id);
     if (!movieRating.isPresent()) {
