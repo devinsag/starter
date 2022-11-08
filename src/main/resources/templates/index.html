@@ -26,8 +26,8 @@
                         <p>Below are additional steps you can try out with your newly deployed <a target="_blank" rel="noreferrer" href='https://docs.architect.io/tutorial/create-component/'>component</a>.</p>
                         <ul>
                             <li>Modify movie ratings and refresh the page to see them appear from postgres</li>
-                            <ol>
-                                <li>Get all movie ratings <kbd class='cmp_input'>GET /movieratings/</kbd></li>
+                            <ol style="list-style: circle;">
+                                <li>Get all movie ratings <kbd class='cmp_input'>GET /movieratings</kbd></li>
                                 <li>Add a movie rating <kbd class='cmp_input'>POST /movieratings { title: string, rating: number }</kbd></li>
                                 <li>Modify a movie rating <kbd class='cmp_input'>PUT /movieratings/{id} { title: string, rating: number }</kbd></li>
                                 <li>Delete a movie rating <kbd class='cmp_input'>DELETE /movieratings/{id}</kbd></li>
