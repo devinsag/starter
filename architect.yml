@@ -39,8 +39,9 @@ services:
       context: .
     interfaces:
       main:
-        port: 8080
+        port: 3000
     environment:
+      SPRING_PORT: 3000
       POSTGRES_USERNAME: ${{ secrets.database_user }}
       POSTGRES_PASSWORD: ${{ secrets.database_password }}
       POSTGRES_URL: jdbc:postgresql://${{ services.database.interfaces.main.host}}:${{ services.database.interfaces.main.port}}/${{ secrets.database_name }}
@@ -50,7 +51,7 @@ services:
     debug:
       interfaces:
         main:
-          port: 8080
+          port: 3000
       environment:
         ENVIRONMENT: dev
 

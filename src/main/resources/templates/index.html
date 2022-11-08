@@ -25,11 +25,13 @@
                         <p>You've deployed your app locally. Now what?</p>
                         <p>Below are additional steps you can try out with your newly deployed <a target="_blank" rel="noreferrer" href='https://docs.architect.io/tutorial/create-component/'>component</a>.</p>
                         <ul>
-                            <li>View and add items to the movieRatings DB</li>
+                            <li>Modify movie ratings and refresh the page to see them appear from postgres</li>
                             <ol>
-                                <li>Go to <kbd class='cmp_input'>react/src/App.js</kbd> in your project folder and open it.</li>
-                                <li>Uncomment line 9 to show the h1 tag, and save the file.</li>
-                                <li>The app will automatically apply the new changes! For more info, checkout out our <a target="_blank" rel="noreferrer" href="https://docs.architect.io/">docs</a>.</li>
+                                <li>Get all movie ratings <kbd class='cmp_input'>GET /movieratings/</kbd></li>
+                                <li>Add a movie rating <kbd class='cmp_input'>POST /movieratings { title: string, rating: number }</kbd></li>
+                                <li>Modify a movie rating <kbd class='cmp_input'>PUT /movieratings/{id} { title: string, rating: number }</kbd></li>
+                                <li>Delete a movie rating <kbd class='cmp_input'>DELETE /movieratings/{id}</kbd></li>
+                                <li>Get a movie rating <kbd class='cmp_input'>GET /movieratings/{id}</kbd></li>
                             </ol>
                             <br/>
                             <li>Deploy your app to the cloud via Architect <b>(Recommended)</b></li>
@@ -39,6 +41,28 @@
                                 <li>Deploy your app to the cloud using the command <kbd class='cmp_input'>architect deploy</kbd></li>
                             </ol>
                         </ul>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div th:unless="${#lists.isEmpty(movieRatings)}" class="card">
+                <div class="card-container">
+                    <div id="card-header">
+                        <h4><b>Movie Ratings</b></h4>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <tr>
+                                <th>Movie ID</th>
+                                <th>Movie Title</th>
+                                <th>Movie Rating</th>
+                            </tr>
+                            <tr th:each="item : ${movieRatings}">
+                                <td th:text="${item.id}"></td>
+                                <td th:text="${item.title}"></td>
+                                <td th:text="${item.rating}"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
