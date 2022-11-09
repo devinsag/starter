@@ -6,7 +6,6 @@
     </head>
     <body>
         <div class="container">
-            <!-- <h1>Uncomment me to see hot reloading in action!</h1> -->
             <p>
                 <a href="//architect.io" target="blank">
                     <img
@@ -25,13 +24,13 @@
                         <p>You've deployed your app locally. Now what?</p>
                         <p>Below are additional steps you can try out with your newly deployed <a target="_blank" rel="noreferrer" href='https://docs.architect.io/tutorial/create-component/'>component</a>.</p>
                         <ul>
-                            <li>Modify movie ratings and refresh the page to see them appear from postgres</li>
+                            <li>Add or modify a movie rating and refresh this page to see them appear</li>
                             <ol style="list-style: circle;">
-                                <li>Get all movie ratings <kbd class='cmp_input'>GET /movieratings</kbd></li>
                                 <li>Add a movie rating <kbd class='cmp_input'>POST /movieratings { title: string, rating: number }</kbd></li>
-                                <li>Modify a movie rating <kbd class='cmp_input'>PUT /movieratings/{id} { title: string, rating: number }</kbd></li>
-                                <li>Delete a movie rating <kbd class='cmp_input'>DELETE /movieratings/{id}</kbd></li>
                                 <li>Get a movie rating <kbd class='cmp_input'>GET /movieratings/{id}</kbd></li>
+                                <li>Get ALL movie ratings <kbd class='cmp_input'>GET /movieratings</kbd></li>
+                                <li>Update a movie rating <kbd class='cmp_input'>PUT /movieratings/{id} { title: string, rating: number }</kbd></li>
+                                <li>Delete a movie rating <kbd class='cmp_input'>DELETE /movieratings/{id}</kbd></li>
                             </ol>
                             <br/>
                             <li>Deploy your app to the cloud via Architect <b>(Recommended)</b></li>
